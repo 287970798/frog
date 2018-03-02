@@ -1,3 +1,5 @@
 FROG
 =
-Content management system
+Content management system  
+
+Powered by ThinkPHP 5.1
