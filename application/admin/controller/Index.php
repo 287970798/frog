@@ -4,13 +4,15 @@
 namespace app\admin\controller;
 
 
-use think\App;
 use think\Controller;
 
 class Index extends Controller
 {
     public function index()
     {
-        return App::VERSION;
+        $this->assign([
+            'title' => '控制台'
+        ]);
+        return $this->fetch();
     }
 }

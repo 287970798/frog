@@ -1,0 +1,65 @@
+{extend name="common/page"}
+{block name="content"}
+<kblock>
+    <button class="layui-btn layui-btn-danger" id="del-all-btn"><i class="layui-icon"></i>批量删除</button>
+    <button class="layui-btn" onclick="kAdminShow('添加权限分类','/privilege/category/add')"><i class="layui-icon"></i>添加</button>
+    <button class="layui-btn" id="reload">
+        <i class="layui-icon">&#x1002;</i> 刷新
+    </button>
+    <span class="k-right" style="line-height:40px"></span>
+</kblock>
+<table id="privilege-category" lay-filter="privilege-category"></table>
+<script type="text/html" id="operateBar">
+    <a class="layui-btn layui-btn-sm" lay-event="detail">看</a>
+    <a class="layui-btn layui-btn-sm" lay-event="edit">改</a>
+    <a class="layui-btn layui-btn-sm" lay-event="del">删</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.auth > 2){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="check">审核</a>
+    {{#  } }}
+</script>
+{/block}
+
+{block name="script"}
+{__block__}
+<script>
+    var tableInst = null;
+    layui.use(['table'], function() {
+        var table = layui.table;
+        // render table
+        var categoryData = {$categories|raw};
+        tableInst = table.render({
+            elem: '#privilege-category',
+            height: 'full-100',
+            data: categoryData,
+            page:true,
+            limit: 10,
+            cols: [[
+                {checkbox: true},
+                {field: 'id', title: 'ID', width: 80, sort: true},
+                {field: 'name', title: '分类名'},
+                {field: 'position', title: '位置'},
+                {field: 'display', title: '显示'},
+                {title: '操作', fixed: 'right', width: 200, align: 'center', toolbar: '#operateBar'}
+
+            ]]
+        });
+        // refresh
+        $('#reload').on('click', function () {
+            reload(tableInst, '/privilege/category/all');
+        })
+        // 删除选中
+        $('#del-all-btn').on('click', function () {
+            var lines = table.checkStatus('privilege-category');
+            delChecked(lines, '/privilege/category/del', function () {
+                reload(tableInst, '/privilege/category/all');
+            });
+
+        })
+
+
+
+    });
+</script>
+{/block}

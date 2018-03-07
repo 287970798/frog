@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{block name="title"}{$title}{/block}</title>
+    {// 引入的css文件}
+    {block name="css"}
+        {include file="common/css"}
+    {/block}
+    {// 内联css样式}
+    {block name="style"}{/block}
+</head>
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+
+    {// 顶部 logo + nav}
+    {block name="header"}
+    {include file="common/base/header"}
+    {/block}
+
+    {// 侧栏导航}
+    {block name="side"}
+    {include file="common/base/side"}
+    {/block}
+
+
+    <div class="layui-body">
+        <div class="layui-tab" lay-allowclose="true" lay-filter="bodyTab">
+            <ul class="layui-tab-title">
+                <li class="layui-this">
+                    {$title}
+                </li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div style="padding: 10px;">
+                        {block name="content"}
+                        <!-- 内容主体区域 -->
+                        内容主体区域
+                        {/block}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        {block name="footer"}
+        <!-- 底部固定区域 -->
+        {include file="common/base/footer"}
+        {/block}
+    </div>
+</div>
+
+
+{// 放置其他content以外的html内容 比如DOM调用的layer弹出层content}
+{block name="other"}{/block}
+
+{// 引入的js文件}
+{block name="js"}
+    {include file="common/js"}
+{/block}
+
+{// 内联javascript脚本}
+{block name="script"}{/block}
+</body>
+</html>
