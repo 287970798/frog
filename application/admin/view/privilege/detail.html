@@ -1,0 +1,36 @@
+{extend name="common/page"}
+{block name="content"}
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">权限详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>权限名</td>
+        <td>{$detail.name}</td>
+    </tr>
+    <tr>
+        <td>模块</td>
+        <td>{$detail.m}</td>
+    </tr>
+    <tr>
+        <td>控制器</td>
+        <td>{$detail.c}</td>
+    </tr>
+    <tr>
+        <td>方法</td>
+        <td>{$detail.a}</td>
+    </tr>
+    <tr>
+        <td>显示</td>
+        <td>{$detail.display}</td>
+    </tr>
+    </tbody>
+</table>
+{/block}

@@ -1,0 +1,62 @@
+{extend name="common/page"}
+{block name="content"}
+<kblock>
+    <button class="layui-btn layui-btn-danger" id="del-all-btn" onclick="$k.delChecked('privilege', '/privilege/del',tableInst, '/privilege')"><i class="layui-icon"></i>批量删除</button>
+    <button class="layui-btn" onclick="$k.adminShow('添加权限','/privilege/add')"><i class="layui-icon"></i>添加</button>
+    <button class="layui-btn" onclick="$k.reload(tableInst, '/privilege');" id="reload">
+        <i class="layui-icon">&#x1002;</i> 刷新
+    </button>
+    <span class="k-right" style="line-height:40px"></span>
+</kblock>
+<table id="privilege" lay-filter="privilege"></table>
+<script type="text/html" id="operateBar">
+    <a class="layui-btn layui-btn-sm" lay-event="detail">看</a>
+    <a class="layui-btn layui-btn-sm" lay-event="edit">改</a>
+    <a class="layui-btn layui-btn-sm" lay-event="del">删</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.auth > 2){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="check">审核</a>
+    {{#  } }}
+</script>
+{/block}
+
+{block name="script"}
+<script>
+    var tableInst = null;
+    layui.use(['table'], function () {
+        var privileges = {$privileges|raw};
+        tableInst = layui.table.render({
+            elem: '#privilege',
+            height: 'full-100',
+            data: privileges,
+            page:true,
+            limit: 10,
+            cols: [[
+                {checkbox: true},
+                {field: 'id', title: 'ID', width: 80, sort: true},
+                {field: 'name', title: '权限名', sort: true},
+                {field: 'category', title: '所属分类', sort: true},
+                {field: 'm', title: '模块', sort: true},
+                {field: 'c', title: '控制器', sort: true},
+                {field: 'a', title: '方法', sort: true},
+                {field: 'display', title: '显示', width: 80, sort: true},
+                {title: '操作', fixed: 'right', width: 150, align: 'center', toolbar: '#operateBar'}
+
+            ]]
+        });
+
+        layui.table.on('tool(privilege)', function (obj) {
+            if (obj.event === 'detail') {
+                $k.adminShow('查看权限详情', '/privilege/detail/'+obj.data.id);
+            }
+            if (obj.event === 'edit') {
+                $k.adminShow('权限编辑', '/privilege/edit/'+obj.data.id)
+            }
+            if (obj.event === 'del') {
+                $k.del(obj.data.id, '/privilege/del', tableInst, '/privilege');
+            }
+        })
+    })
+</script>
+{/block}

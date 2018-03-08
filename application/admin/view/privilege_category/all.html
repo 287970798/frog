@@ -2,8 +2,8 @@
 {block name="content"}
 <kblock>
     <button class="layui-btn layui-btn-danger" id="del-all-btn"><i class="layui-icon"></i>批量删除</button>
-    <button class="layui-btn" onclick="kAdminShow('添加权限分类','/privilege/category/add')"><i class="layui-icon"></i>添加</button>
-    <button class="layui-btn" id="reload">
+    <button class="layui-btn" onclick="$k.adminShow('添加权限分类','/privilege/category/add')"><i class="layui-icon"></i>添加</button>
+    <button class="layui-btn" onclick="$k.reload(tableInst, '/privilege/category/all');" id="reload">
         <i class="layui-icon">&#x1002;</i> 刷新
     </button>
     <span class="k-right" style="line-height:40px"></span>
@@ -45,17 +45,22 @@
 
             ]]
         });
-        // refresh
-        $('#reload').on('click', function () {
-            reload(tableInst, '/privilege/category/all');
-        })
+
         // 删除选中
         $('#del-all-btn').on('click', function () {
-            var lines = table.checkStatus('privilege-category');
-            delChecked(lines, '/privilege/category/del', function () {
-                reload(tableInst, '/privilege/category/all');
-            });
-
+            $k.delChecked('privilege-category', '/privilege/category/del', tableInst, '/privilege/category/all');
+        })
+        // tool bar
+        table.on('tool(privilege-category)', function (obj) {
+            if (obj.event === 'detail') {
+                $k.adminShow('权限分类详情', '/privilege/category/detail/'+obj.data.id)
+            }
+            if (obj.event === 'edit') {
+                $k.adminShow('权限分类编辑', '/privilege/category/edit/'+obj.data.id)
+            }
+            if (obj.event === 'del') {
+                $k.del(obj.data.id, '/privilege/category/del', tableInst, '/privilege/category/all')
+            }
         })
 
 

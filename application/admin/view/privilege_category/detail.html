@@ -1,0 +1,28 @@
+{extend name="common/page"}
+{block name="content"}
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">权限分类详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>分类名</td>
+        <td>{$detail.name}</td>
+    </tr>
+    <tr>
+        <td>显示位置</td>
+        <td>{$detail.position}</td>
+    </tr>
+    <tr>
+        <td>显示</td>
+        <td>{$detail.display}</td>
+    </tr>
+    </tbody>
+</table>
+{/block}

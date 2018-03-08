@@ -2,26 +2,17 @@
 {block name="content"}
 <form class="layui-form" action="">
     <div class="layui-form-item">
-        <label class="layui-form-label">分类名</label>
+        <label class="layui-form-label">角色名</label>
         <div class="layui-input-block">
-            <input type="text" name="name" required lay-verify="required" placeholder="请输入分类名" autocomplete="off"
+            <input type="text" name="name" required lay-verify="required" placeholder="请输入角色名" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">显示位置</label>
+        <label class="layui-form-label">禁用</label>
         <div class="layui-input-block">
-            <select name="position" lay-verify="required">
-                <option value="1">左侧栏</option>
-                <option value="2">顶部导航</option>
-            </select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">显示</label>
-        <div class="layui-input-block">
-            <input type="radio" name="display" value="1" title="是" checked>
-            <input type="radio" name="display" value="2" title="否">
+            <input type="radio" name="disabled" value="1" title="是">
+            <input type="radio" name="disabled" value="2" title="否" checked>
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
@@ -42,9 +33,9 @@
 {__block__}
 <script>
     layui.use(['form'], function () {
-        $k.submit('addForm', '/privilege/category/add', function () {
+        $k.submit('addForm', '/role/add', function () {
             // reload category data table to refresh data
-            $k.reload(parent.tableInst, '/privilege/category/all');
+            $k.reload(parent.tableInst, '/role');
             // 关闭父级弹出层
             $k.adminClose();
         })

@@ -4,7 +4,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">分类名</label>
         <div class="layui-input-block">
-            <input type="text" name="name" required lay-verify="required" placeholder="请输入分类名" autocomplete="off"
+            <input value="{$detail.name}" type="text" name="name" required lay-verify="required" placeholder="请输入分类名" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -12,27 +12,27 @@
         <label class="layui-form-label">显示位置</label>
         <div class="layui-input-block">
             <select name="position" lay-verify="required">
-                <option value="1">左侧栏</option>
-                <option value="2">顶部导航</option>
+                <option value="1" {if $detail.position == 1}selected{/if}>左侧栏</option>
+                <option value="2" {if $detail.position == 2}selected{/if}>顶部导航</option>
             </select>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">显示</label>
         <div class="layui-input-block">
-            <input type="radio" name="display" value="1" title="是" checked>
-            <input type="radio" name="display" value="2" title="否">
+            <input type="radio" name="display" value="1" title="是"  {if $detail.display == 1}checked{/if}>
+            <input type="radio" name="display" value="2" title="否" {if $detail.display == 2}checked{/if}>
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
-            <textarea name="note" placeholder="请输入内容" class="layui-textarea"></textarea>
+            <textarea name="note" placeholder="请输入内容" class="layui-textarea">{$detail.note}</textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addForm">增加</button>
+            <button class="layui-btn" lay-submit lay-filter="editForm">修改</button>
         </div>
     </div>
 </form>
@@ -42,7 +42,7 @@
 {__block__}
 <script>
     layui.use(['form'], function () {
-        $k.submit('addForm', '/privilege/category/add', function () {
+        $k.submit('editForm', '/privilege/category/edit/{$detail.id}', function () {
             // reload category data table to refresh data
             $k.reload(parent.tableInst, '/privilege/category/all');
             // 关闭父级弹出层

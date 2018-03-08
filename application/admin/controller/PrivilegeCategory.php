@@ -27,21 +27,33 @@ class PrivilegeCategory extends BaseController
         return $this->fetch();
     }
     // edit
-
-    // delete
-    public function del()
+    public function edit()
     {
-        if (!$this->request->isDelete() || !$this->request->isAjax()) {
-            return mkRestful(-1, '非法操作');
+        $id = $this->request->param('id');
+        $detail = PriCateModel::get($id);
+        if ($this->request->isAjax() && $this->request->isPost()) {
+            $post = $this->request->post();
+            $result = $detail->allowField(true)->save($post);
+            if ($result === 1) {
+                return mkRestful(0, '修改成功', 'success');
+            } else {
+                return mkRestful(1, '修改失败');
+            }
         }
-        $ids = $this->request->delete('ids');
-        $result = PriCateModel::destroy($ids);
-        if ($result > 0) {
-            $return = mkRestful(0, '成功删除'.$result.'条数据', 'success');
-        } else {
-            $return = mkRestful(1, '删除失败');
+        if (!$detail) {
+            return mkRestful(-1, '权限分类不存在');
         }
-        return $return;
+        $this->assign([
+            'title' => '权限分类编辑',
+            'detail' => $detail->getData()
+        ]);
+        return $this->fetch();
+
+    }
+    // delete
+    public function del($model = null)
+    {
+        return parent::del(new PriCateModel());
     }
     // all
     public function all()
@@ -62,5 +74,10 @@ class PrivilegeCategory extends BaseController
             'categories' => $categories
         ]);
         return $this->fetch();
+    }
+    // detail
+    public function detail($model = null)
+    {
+        return parent::detail(new PriCateModel());
     }
 }

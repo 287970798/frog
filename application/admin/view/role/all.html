@@ -1,0 +1,58 @@
+{extend name="common/page"}
+{block name="content"}
+<kblock>
+    <button class="layui-btn layui-btn-danger" id="del-all-btn" onclick="$k.delChecked('role', '/role/del',tableInst, '/role')"><i class="layui-icon"></i>批量删除</button>
+    <button class="layui-btn" onclick="$k.adminShow('添加用户','/role/add')"><i class="layui-icon"></i>添加</button>
+    <button class="layui-btn" onclick="$k.reload(tableInst, '/role');" id="reload">
+        <i class="layui-icon">&#x1002;</i> 刷新
+    </button>
+    <span class="k-right" style="line-height:40px"></span>
+</kblock>
+<table id="role" lay-filter="role"></table>
+<script type="text/html" id="operateBar">
+    <a class="layui-btn layui-btn-sm" lay-event="detail">看</a>
+    <a class="layui-btn layui-btn-sm" lay-event="edit">改</a>
+    <a class="layui-btn layui-btn-sm" lay-event="del">删</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.auth > 2){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="check">审核</a>
+    {{#  } }}
+</script>
+{/block}
+
+{block name="script"}
+<script>
+    var tableInst = null;
+    layui.use(['table'], function () {
+        var roles = {$roles|raw};
+        tableInst = layui.table.render({
+            elem: '#role',
+            height: 'full-100',
+            data: roles,
+            page:true,
+            limit: 10,
+            cols: [[
+                {checkbox: true},
+                {field: 'id', title: 'ID', width: 80, sort: true},
+                {field: 'name', title: '角色名', sort: true},
+                {field: 'disabled', title: '禁用', width: 80, sort: true},
+                {title: '操作', fixed: 'right', width: 150, align: 'center', toolbar: '#operateBar'}
+
+            ]]
+        });
+
+        layui.table.on('tool(role)', function (obj) {
+            if (obj.event === 'detail') {
+                $k.adminShow('查看权限详情', '/role/detail/'+obj.data.id);
+            }
+            if (obj.event === 'edit') {
+                $k.adminShow('权限编辑', '/role/edit/'+obj.data.id)
+            }
+            if (obj.event === 'del') {
+                $k.del(obj.data.id, '/role/del', tableInst, '/role');
+            }
+        })
+    })
+</script>
+{/block}
