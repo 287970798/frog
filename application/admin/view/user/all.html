@@ -1,14 +1,14 @@
 {extend name="common/page"}
 {block name="content"}
 <kblock>
-    <button class="layui-btn layui-btn-danger" id="del-all-btn" onclick="$k.delChecked('role', '/role/del',tableInst, '/role')"><i class="layui-icon"></i>批量删除</button>
-    <button class="layui-btn" onclick="$k.adminShow('添加角色','/role/add')"><i class="layui-icon"></i>添加</button>
-    <button class="layui-btn" onclick="$k.reload(tableInst, '/role');" id="reload">
+    <button class="layui-btn layui-btn-danger" id="del-all-btn" onclick="$k.delChecked('user', '/user/del',tableInst, '/user')"><i class="layui-icon"></i>批量删除</button>
+    <button class="layui-btn" onclick="$k.adminShow('添加用户','/user/add')"><i class="layui-icon"></i>添加</button>
+    <button class="layui-btn" onclick="$k.reload(tableInst, '/user');" id="reload">
         <i class="layui-icon">&#x1002;</i> 刷新
     </button>
     <span class="k-right" style="line-height:40px"></span>
 </kblock>
-<table id="role" lay-filter="role"></table>
+<table id="user" lay-filter="user"></table>
 <script type="text/html" id="operateBar">
     <a class="layui-btn layui-btn-sm" lay-event="detail">看</a>
     <a class="layui-btn layui-btn-sm" lay-event="edit">改</a>
@@ -19,9 +19,9 @@
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="check">审核</a>
     {{#  } }}
 </script>
-<script type="text/html" id="privileges">
-{{# for(var i in d.privileges){ }}
-<span class="layui-badge layui-bg-gray">{{d.privileges[i].name}}</span>
+<script type="text/html" id="roles">
+{{# for(var i in d.roles) { }}
+    <span class="layui-badge layui-bg-gray">{{d.roles[i].name}}</span>
 {{# } }}
 </script>
 {/block}
@@ -30,33 +30,33 @@
 <script>
     var tableInst = null;
     layui.use(['table'], function () {
-        var roles = {$roles|raw};
+        var users = {$users|raw};
         tableInst = layui.table.render({
-            elem: '#role',
+            elem: '#user',
             height: 'full-100',
-            data: roles,
+            data: users,
             page:true,
             limit: 10,
             cols: [[
                 {checkbox: true},
                 {field: 'id', title: 'ID', width: 80, sort: true},
-                {field: 'name', title: '角色名', width: 120, sort: true},
-                {title: '权限', templet: '#privileges', sort: true},
-                {field: 'disabled', title: '禁用', width: 80, sort: true},
+                {field: 'username', title: '用户名', width: 100, sort: true},
+                {title: '角色', templet: '#roles', sort: true},
+                {field: 'locked', title: '禁用', width: 80, sort: true},
                 {title: '操作', fixed: 'right', width: 150, align: 'center', toolbar: '#operateBar'}
 
             ]]
         });
 
-        layui.table.on('tool(role)', function (obj) {
+        layui.table.on('tool(user)', function (obj) {
             if (obj.event === 'detail') {
-                $k.adminShow('查看角色详情', '/role/detail/'+obj.data.id);
+                $k.adminShow('查看权限详情', '/user/detail/'+obj.data.id);
             }
             if (obj.event === 'edit') {
-                $k.adminShow('角色编辑', '/role/edit/'+obj.data.id)
+                $k.adminShow('权限编辑', '/user/edit/'+obj.data.id)
             }
             if (obj.event === 'del') {
-                $k.del(obj.data.id, '/role/del', tableInst, '/role');
+                $k.del(obj.data.id, '/user/del', tableInst, '/user');
             }
         })
     })

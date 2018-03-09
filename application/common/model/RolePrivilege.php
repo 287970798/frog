@@ -4,7 +4,9 @@
 namespace app\common\model;
 
 
-class RolePrivilege extends BaseModel
+use think\model\Pivot;
+
+class RolePrivilege extends Pivot
 {
-    protected $autoWriteTimeStamp = false;
+
 }

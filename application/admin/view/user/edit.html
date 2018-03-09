@@ -1,0 +1,56 @@
+{extend name="common/page"}
+{block name="content"}
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input value="{$user.username}" type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" placeholder="不修改请留空" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block">
+            {volist name="roles" id="role"}
+            <input type="checkbox" name="role_id[{$role.id}]" title="{$role.name}" {if in_array($role.id, $user.roleIdArr)}checked{/if}>
+            {/volist}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">锁定</label>
+        <div class="layui-input-block">
+            <input type="radio" name="locked" value="1" title="是" {if $user.locked==1 }checked{/if}>
+            <input type="radio" name="locked" value="2" title="否" {if $user.locked==2 }checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="note" placeholder="请输入内容" class="layui-textarea">{$user.note}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="editForm">修改</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name="script"}
+<script>
+    layui.use(['form'], function () {
+        $k.submit('editForm', '/user/edit/{$user.id}', function () {
+            $k.reload(parent.tableInst, '/user');
+            $k.adminClose();
+        }, true)
+    })
+</script>
+{/block}

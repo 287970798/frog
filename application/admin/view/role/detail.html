@@ -1,0 +1,28 @@
+{extend name="common/page"}
+{block name="content"}
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">角色详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>角色名</td>
+        <td>{$detail.name}</td>
+    </tr>
+    <tr>
+        <td>禁用</td>
+        <td>{$detail.disabled}</td>
+    </tr>
+    <tr>
+        <td>备注</td>
+        <td>{$detail.note}</td>
+    </tr>
+    </tbody>
+</table>
+{/block}

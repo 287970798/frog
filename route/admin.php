@@ -20,7 +20,7 @@ Route::any('role/edit/:id$', 'admin/Role/edit');
 Route::any('role$', 'admin/Role/all');
 Route::any('role/detail/:id$', 'admin/Role/detail');
 
-// role
+// user
 Route::any('user/add$', 'admin/user/add');
 Route::any('user/del$', 'admin/user/del');
 Route::any('user/edit/:id$', 'admin/user/edit');

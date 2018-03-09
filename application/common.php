@@ -36,3 +36,18 @@ function mkRestful($code = 1, $message = '操作失败', $type = 'error', $data 
         ]
     ];
 }
+
+/**
+ * 生成layui表格重载的接口数据
+ * @param \think\Paginator $pagination
+ * @return array
+ */
+function mkTableRestful(\think\Paginator $pagination) {
+    $paginationArrayData = $pagination->toArray();
+    return [
+        'code' => 0,
+        'msg' => '',
+        'count' => $paginationArrayData['total'],
+        'data' => $paginationArrayData['data']
+    ];
+}

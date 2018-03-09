@@ -4,7 +4,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">角色名</label>
         <div class="layui-input-block">
-            <input type="text" name="name" required lay-verify="required" placeholder="请输入角色名" autocomplete="off"
+            <input value="{$role.name}" type="text" name="name" required lay-verify="required" placeholder="请输入角色名" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -16,7 +16,7 @@
                 <label class="layui-form-label">{$cate.name}</label>
                 <div class="layui-input-block">
                     {volist name="cate.privileges" id="privilege"}
-                    <input type="checkbox" name="privilege_id[{$privilege.id}]" title="{$privilege.name}" lay-skin="primary">
+                    <input type="checkbox" name="privilege_id[{$privilege.id}]" title="{$privilege.name}" lay-skin="primary" {if in_array($privilege.id, $role.privilegeIdArr)}checked{/if}>
                     {/volist}
                 </div>
             </div>
@@ -26,19 +26,19 @@
     <div class="layui-form-item">
         <label class="layui-form-label">禁用</label>
         <div class="layui-input-block">
-            <input type="radio" name="disabled" value="1" title="是">
-            <input type="radio" name="disabled" value="2" title="否" checked>
+            <input type="radio" name="disabled" value="1" title="是" {if $role.disabled == 1}checked{/if}>
+            <input type="radio" name="disabled" value="2" title="否" {if $role.disabled == 2}checked{/if}>
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
-            <textarea name="note" placeholder="请输入内容" class="layui-textarea"></textarea>
+            <textarea name="note" placeholder="请输入内容" class="layui-textarea">{$role.note}</textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addForm">增加</button>
+            <button class="layui-btn" lay-submit lay-filter="editForm">修改</button>
         </div>
     </div>
 </form>
@@ -48,12 +48,12 @@
 {__block__}
 <script>
     layui.use(['form'], function () {
-        $k.submit('addForm', '/role/add', function () {
+        $k.submit('editForm', '/role/edit/{$role.id}', function () {
             // reload category data table to refresh data
             $k.reload(parent.tableInst, '/role');
             // 关闭父级弹出层
             $k.adminClose();
-        }, true)
+        })
     })
 </script>
 {/block}

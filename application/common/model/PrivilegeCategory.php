@@ -23,4 +23,9 @@ class PrivilegeCategory extends BaseModel
         ];
         return $display[$value];
     }
+
+    public function privileges()
+    {
+        return $this->hasMany('Privilege', 'category_id', 'id');
+    }
 }

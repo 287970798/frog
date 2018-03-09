@@ -4,7 +4,8 @@
 namespace app\common\model;
 
 
-class UserRole extends BaseModel
+use think\model\Pivot;
+
+class UserRole extends Pivot
 {
-    protected $autoWriteTimeStamp = false;
 }
