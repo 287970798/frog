@@ -3,10 +3,37 @@
 
 namespace app\admin\controller;
 
+use app\common\lib\enum\PriCateEnum;
+use app\common\lib\enum\PriEnum;
 use app\common\model\PrivilegeCategory as PriCateModel;
+use think\facade\Session;
+use think\facade\Url;
 
 class PrivilegeCategory extends BaseController
 {
+    public static function menu()
+    {
+        $menu = PriCateModel::with(['privileges' => function($query){return $query->where('display', PriEnum::DISPLAY);}])
+            ->where('display', PriCateEnum::DISPLAY)
+            ->order('list_order asc')
+            ->order('id desc')
+            ->select()
+            ->visible(['privileges'=>['name', 'a','c','m'], 'id', 'name', 'position'])
+            ->toArray();
+        foreach ($menu as &$item) {
+            foreach ($item['privileges'] as $key => &$privilege) {
+                $str = $privilege['m'] . '/' . $privilege['c'] . '/' . $privilege['a'];
+                // 删除未无权限的功能，超管理员除外
+                if (!in_array(strtolower($str), Session::get('admin')['privileges']) && Session::get('admin.id') !== 1) {
+                    unset($item['privileges'][$key]);
+                    continue;
+                }
+                $privilege['url'] = Url::build($str);
+            }
+        }
+//        print_r($menu);
+        return $menu;
+    }
     // add
     public function add()
     {

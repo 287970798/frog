@@ -43,8 +43,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label">显示</label>
         <div class="layui-input-block">
-            <input type="radio" name="display" value="1" title="是" checked>
-            <input type="radio" name="display" value="2" title="否">
+            <input type="radio" name="display" value="1" title="是">
+            <input type="radio" name="display" value="2" title="否" checked>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input value="100" type="number" name="list_order" required lay-verify="required" placeholder="请输入排序1-999整数，小在前" autocomplete="off"
+                   class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">

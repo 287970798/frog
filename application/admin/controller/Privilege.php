@@ -13,7 +13,7 @@ class Privilege extends BaseController
     {
         if ($this->request->isAjax()) {
             $get = $this->request->get();
-            $categories = PriModel::with('category')->paginate($get['limit'])->toArray();
+            $categories = PriModel::with('category')->order('category_id asc,name asc,id asc')->paginate($get['limit'])->toArray();
             return [
                 'code' => 0,
                 'msg' => '',
@@ -21,7 +21,7 @@ class Privilege extends BaseController
                 'data' => $categories['data']
             ];
         }
-        $privileges = PriModel::with('category')->select();
+        $privileges = PriModel::with('category')->order('category_id asc,name asc,id asc')->select();
         $this->assign([
             'title' => '权限管理',
             'privileges' => $privileges
@@ -87,6 +87,8 @@ class Privilege extends BaseController
     // del
     public function del($model = null)
     {
+        // 删除权限，需要删除角色权限中间记录，分类权限中间记录
+        // todo...
         return parent::del(new PriModel());
     }
 }

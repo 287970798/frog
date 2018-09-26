@@ -1,4 +1,17 @@
 <?php
+// login
+Route::any('admin/login', 'admin/login/index');
+Route::any('admin/logout', 'admin/login/logout');
+
+// content
+Route::any('admin/content$', 'admin/content/index');
+
+// product
+Route::any('admin/product$', 'admin/product/index');
+
+// config
+Route::any('admin/config$', 'admin/config/index');
+
 // privilege category
 Route::any('privilege/category/add', 'admin/PrivilegeCategory/add');
 Route::any('privilege/category/all', 'admin/PrivilegeCategory/all');
@@ -26,4 +39,8 @@ Route::any('user/del$', 'admin/user/del');
 Route::any('user/edit/:id$', 'admin/user/edit');
 Route::any('user$', 'admin/user/all');
 Route::any('user/detail/:id$', 'admin/user/detail');
+
+// config
+Route::any('config/edit/:id$', 'admin/config/edit');
+
 
