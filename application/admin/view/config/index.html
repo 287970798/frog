@@ -1,0 +1,41 @@
+{extend name="common/page"}
+{block name="content"}
+
+<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">系统名称</label>
+        <div class="layui-input-block">
+            <input value="{$config.site_name}" type="text" name="site_name" placeholder="请输入系统名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">关键字</label>
+        <div class="layui-input-inline">
+            <input value="{$config.keywords}" type="text" name="keywords" placeholder="请输入关键字" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">多个关键字，以英文逗号隔开</div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入系统描述" class="layui-textarea">{$config.description}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="editForm">修改</button>
+        </div>
+    </div>
+
+</form>
+
+{/block}
+
+{block name="script"}
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        $k.submit('editForm', '/config/edit/1');
+    })
+</script>
+{/block}
