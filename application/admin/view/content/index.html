@@ -1,4 +1,26 @@
 {extend name="common/page"}
+{block name="style"}
+<style>
+    .hide {
+        display: none
+    }
+</style>
+{/block}
 {block name="content"}
-内容模块
+<kblock>
+    <button class="layui-btn layui-btn-danger" id="del-all-btn"><i class="layui-icon"></i>批量删除</button>
+    <button class="layui-btn" onclick="$k.adminShow('添加权限分类','/privilege/category/add')"><i class="layui-icon"></i>添加
+    </button>
+    <button class="layui-btn" id="reload">
+        <i class="layui-icon">&#x1002;</i> 刷新
+    </button>
+    <span class="k-right" style="line-height:40px"></span>
+</kblock>
+
+
+{/block}
+
+{block name="script"}
+{__block__}
+
 {/block}

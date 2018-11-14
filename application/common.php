@@ -12,10 +12,26 @@
 // 应用公共文件
 
 /**
+ * 生成简易接口数据 功能同 mkRestful()
+ * @param string $message
+ * @param int $code
+ * @param null $data
+ * @return array
+ */
+function makeApi($message = '成功', $code = 0, $data = null)
+{
+    return [
+        'code' => $code,
+        'message' => $message,
+        'data' => $data
+    ];
+}
+
+/**
  * 生成restful格式的接口数据
  * @param int $code
  * @param string $message
- * @param int $type
+ * @param string $type error|success
  * @param array $data
  * @return array
  */
@@ -32,7 +48,8 @@ function mkRestful($code = 1, $message = '操作失败', $type = 'error', $data 
     return [
         'error_response' => [
             'code' => $code,
-            'message' => $message
+            'message' => $message,
+            'error' => $data
         ]
     ];
 }

@@ -1,0 +1,28 @@
+{extend name="common/page"}
+{block name="content"}
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">文件详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>文件名</td>
+        <td>{$detail.name}</td>
+    </tr>
+    <tr>
+        <td>文件链接</td>
+        <td>{$detail.path}</td>
+    </tr>
+    <tr>
+        <td>文件说明</td>
+        <td>{$detail.note}</td>
+    </tr>
+    </tbody>
+</table>
+{/block}

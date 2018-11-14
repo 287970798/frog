@@ -11,4 +11,5 @@ class BaseModel extends Model
 {
     use SoftDelete;
     protected $autoWriteTimestamp = true;
+
 }

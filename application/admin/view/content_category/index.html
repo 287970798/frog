@@ -1,0 +1,77 @@
+{extend name="common/page"}
+{block name="style"}
+<style>
+    .hide{display:none}
+</style>
+{/block}
+{block name="content"}
+<kblock>
+    <button class="layui-btn layui-btn-danger" id="del-all-btn"><i class="layui-icon"></i>批量删除</button>
+    <button class="layui-btn" onclick="$k.adminShow('添加一级栏目','/admin/content_category/add')"><i class="layui-icon"></i>添加
+    </button>
+    <button class="layui-btn" onclick="document.location.reload();" id="reload">
+        <i class="layui-icon">&#x1002;</i> 刷新
+    </button>
+    <span class="k-right" style="line-height:40px"></span>
+</kblock>
+
+<button class="layui-btn layui-btn-primary up-all">全部收起</button>
+<button class="layui-btn layui-btn-primary down-all">全部展开</button>
+<button class="layui-btn layui-btn-primary get-checked">获取选中</button>
+<table class="layui-table layui-form" id="category-table"></table>
+
+{/block}
+
+{block name="script"}
+{__block__}
+<script>
+    ////
+    $k.makeCatTable({
+        api: '/admin/content_category/all',
+        elem: '#category-table',
+        addCallback: function (data) {
+            console.log(data)
+            $k.adminShow('添加栏目','/admin/content_category/add/'+data.item.id)
+        },
+        editCallback: function (data) {
+            $k.adminShow('编辑栏目', '/admin/content_category/edit/'+data.item.id);
+        },
+        deleteCallback: function (data) {
+            $.ajax({
+                url:'/admin/content_category/delete/'+data.item.id,
+                type: 'DELETE'
+            })
+                .then(function (value) {
+                    if (value.success_response){
+                        layer.msg('删除成功', {time: 500}, function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.msg(value.error_response.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        },
+        switchCallback: function (data) {
+            var status = data.elem.checked ? 1 : 2;
+            $.ajax({
+                url: '/admin/content_category/status/' + data.item.id,
+                type: 'POST',
+                data: {status: status}
+            })
+                .then(function (value) {
+                    if (value.success_response){
+                        layer.msg('状态切换成功',{time: 500});
+                    } else {
+                        layer.msg('状态切换失败')
+                    }
+                })
+                .catch(function (reason) {
+                    console.log(reason)
+                })
+        }
+    });
+</script>
+{/block}

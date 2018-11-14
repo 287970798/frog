@@ -1,0 +1,71 @@
+{extend name="common/page"}
+{block name="content"}
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文件名</label>
+        <div class="layui-input-block">
+            <input value="{$detail.name}" type="text" name="name" required lay-verify="required" placeholder="请输入文件名" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" id="file-item">
+        <label class="layui-form-label">文件地址</label>
+        <div class="layui-input-block">
+            <input value="{$detail.path}" type="text" name="path" required lay-verify="required" placeholder="请上传文件或直接输入文件地址" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <a class="layui-btn layui-btn-sm layui-btn-radius" id="upload-btn"><i class="layui-icon">&#xe67c;</i>上传文件</a>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="note" placeholder="请输入备注" class="layui-textarea">{$detail.note}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addForm">增加</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name="style"}
+{__block__}
+<style>
+    #file-item{
+        position: relative;
+    }
+    #upload-btn{
+        position: absolute;
+        top: 4px;
+        right: 4px;
+    }
+</style>
+{/block}
+
+{block name="script"}
+{__block__}
+<script>
+    layui.use(['form', 'upload'], function () {
+
+        layui.upload.render({
+            elem: '#upload-btn',
+            url: '',
+            done: function (res) {
+                console.log(res);
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
+
+        $k.submit('addForm', '/admin/file_center/add', function () {
+            // reload category data table to refresh data
+            $k.reload(parent.tableInst, '/admin/file_center/all');
+            // 关闭父级弹出层
+            $k.adminClose();
+        })
+    })
+</script>
+{/block}

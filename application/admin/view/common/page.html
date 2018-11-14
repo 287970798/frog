@@ -25,6 +25,12 @@ content
 {block name="js"}
 {include file="common/js"}
 {/block}
-{block name="script"}{/block}
+{block name="script"}
+<script>
+    layui.config({
+        base: '__STATIC__/layui@2.4.5/extend/'
+    });
+</script>
+{/block}
 </body>
 </html>

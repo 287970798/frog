@@ -1,0 +1,114 @@
+{extend name="common/page"}
+{block name="content"}
+<form class="layui-form" action="">
+    <input type="hidden" name="pid" value="{$cat.pid}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类名</label>
+        <div class="layui-input-block">
+            <input value="{$cat.name}" type="text" name="name" required lay-verify="required" placeholder="请输入分类名" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    {if $multilingual==1}
+    <fieldset class="layui-elem-field">
+        <legend>多语言栏目名</legend>
+        <div class="layui-field-box">
+            {volist name="languages" id="language"}
+            {php}if($language['flag'] == 'cn') continue;{/php}
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language.name}</label>
+                <div class="layui-input-block">
+                    <input {if count($language.multi_cat) > 0} value="{$language.multi_cat[0]['name']}" {/if}
+                            type="text" name="multi_name[{$language.id}]" lay-verify="required" placeholder="请输入{$language.name}栏目名" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            {/volist}
+        </div>
+    </fieldset>
+    {/if}
+    <!--
+    <div class="layui-form-item">
+        <label class="layui-form-label">显示位置</label>
+        <div class="layui-input-block">
+            <div class="layui-unselect layui-form-select" onclick="$(this).addClass('layui-form-selected')">
+                <div class="layui-select-title">
+                    <input type="text" id="sinput" placeholder="请选择" readonly=""
+                                                       class="layui-input layui-unselect"><i class="layui-edge"></i>
+                </div>
+                <dl class="layui-anim layui-anim-upbit">
+                    <ul id="demo" onclick="event.stopPropagation();" class="layui-box layui-tree"></ul>
+                    <a class="layui-btn" onclick="event.stopPropagation();$('.layui-form-select').removeClass('layui-form-selected')">关闭</a>
+                </dl>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">启用</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="是" {if $cat.status == 1}checked{/if}>
+            <input type="radio" name="status" value="2" title="否" {if $cat.status == 2}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input value="{$cat.list_order}" type="number" name="list_order" required lay-verify="required"
+                   placeholder="请输入排序1-999整数，小在前" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="note" placeholder="请输入内容" class="layui-textarea">{$cat.note}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="editForm">修改</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name="script"}
+{__block__}
+<script>
+    layui.use(['tree', 'form'], function () {
+        $k.submit('editForm', '/admin/content_category/edit/{$cat.id}', function () {
+            // reload category data table to refresh data
+            // $k.reload(parent.tableInst, '/admin/content_category/all');
+            // 关闭父级弹出层
+            $k.adminClose();
+            parent.location.reload();
+        }, true);
+
+        // layui.tree({
+        //     elem: '#demo' //传入元素选择器
+        //     , nodes: [{ //节点
+        //         name: '父节点1', id: 1
+        //         , children: [{
+        //             name: '子节点11', id: 2
+        //         }, {
+        //             name: '子节点12', id: 3
+        //         }]
+        //     }, {
+        //         name: '父节点2（可以点左侧箭头，也可以双击标题）', id: 4
+        //         , children: [{
+        //             name: '子节点21', id: 5
+        //             , children: [{
+        //                 name: '子节点211', id: 6
+        //             }]
+        //         }]
+        //     }],
+        //     click: function (node) {
+        //         console.log(node) //node即为当前点击的节点数据
+        //         $('#sinput').val(node.name);
+        //     }
+        // });
+    })
+</script>
+{/block}

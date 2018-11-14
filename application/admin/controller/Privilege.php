@@ -91,4 +91,20 @@ class Privilege extends BaseController
         // todo...
         return parent::del(new PriModel());
     }
+
+    // get methods
+    public function public_getMethods($name)
+    {
+        $name = 'app\\admin\\controller\\' . $name;
+        $class = new \ReflectionClass($name);
+        $methods = $class->getMethods();
+
+        foreach ($methods as $key => $method) {
+            if ($method->class !== $name) {
+                unset($methods[$key]);
+            }
+        }
+
+        return json($methods);
+    }
 }

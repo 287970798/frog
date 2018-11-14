@@ -1,0 +1,27 @@
+{extend name="common/page"}
+{block name="content"}
+
+<div class="title">
+    {$detail.name}
+</div>
+<div class="content">
+    {$detail.content}
+</div>
+
+{/block}
+
+{block name="style"}
+{__block__}
+<style>
+    .title{
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .content{
+        margin-top: 20px;
+        line-height: 2em;
+        font-size: 16px;
+    }
+</style>
+{/block}

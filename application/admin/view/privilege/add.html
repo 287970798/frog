@@ -1,6 +1,7 @@
 {extend name="common/page"}
 {block name="content"}
 <form class="layui-form" action="">
+    <div id="methods"></div>
     <div class="layui-form-item">
         <label class="layui-form-label">权限名</label>
         <div class="layui-input-block">
@@ -35,7 +36,7 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">操作</label>
-        <div class="layui-input-block">
+        <div class="layui-input-block" id="get-methods">
             <input type="text" name="a" required lay-verify="required" placeholder="请输入操作" autocomplete="off"
                    class="layui-input">
         </div>
@@ -68,6 +69,28 @@
 </form>
 {/block}
 
+{block name="style"}
+{__block__}
+<style>
+    #methods{
+        border: 1px solid #EEE;
+        min-width: 150px;
+        position: absolute;
+        z-index: 999;
+        display: none;
+    }
+    #methods ul li{
+        height: 30px;
+        line-height: 30px;
+        padding-left: 10px;
+        display: block;
+        background-color: #FFF;
+    }
+    #methods ul li:hover{
+        background-color: #EEEEEE;
+    }
+</style>
+{/block}
 {block name="script"}
 <script>
     layui.use(['form'], function () {
@@ -76,5 +99,52 @@
             $k.adminClose();
         })
     })
+
+    var methodsBox = $('#methods');
+    var methodInput = $('#get-methods input');
+
+    $('body').click(function (e) {
+        var target = $(e.target);
+        if (!target.is('#methods *') && !target.is('#get-methods *')) {
+            if (methodsBox.is(':visible')) {
+                methodsBox.slideUp();
+            }
+        }
+    });
+
+    methodInput.focus(function () {
+        var c = $('input[name="c"]').val();
+        var of = methodInput.offset();
+        methodsBox.css('top', of.top + 40);
+        methodsBox.css('left', of.left);
+
+        if (c.length === 0) return;
+        var url = '/privilege/methods?name=' + c;
+        $.get(url)
+            .then(function (value) {
+                console.log(value)
+                var str = '<ul>';
+                for (var i in value) {
+                    str += '<li>'+value[i].name+'</li>';
+                }
+                str += '</ul>';
+                methodsBox.empty().append(str);
+                methodsBox.slideDown(function () {
+                    var lis = methodsBox.find('li');
+                    lis.click(function () {
+                        console.log($(this))
+                        methodInput.val($(this).text());
+                        methodsBox.slideUp();
+                    })
+                });
+
+            })
+            .fail(function (error) {
+                console.log(error)
+            })
+    });
+
+
+
 </script>
 {/block}

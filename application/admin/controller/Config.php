@@ -27,6 +27,9 @@ class Config extends BaseController
     {
         $id = $this->request->param('id');
         $post = $this->request->post();
+        if (!isset($post['multilingual'])) {
+            $post['multilingual'] = 2;
+        }
         $config = ConfigModel::get($id);
         $result = $config->save($post);
         if ($result === 1) {

@@ -9,6 +9,7 @@ use think\facade\Session;
 
 class BaseController extends Controller
 {
+    protected $config;
 
     public function initialize()
     {
@@ -62,7 +63,7 @@ class BaseController extends Controller
         $id = $this->request->param('id');
         $detail = $model->find($id);
         if (!$detail) {
-            return mkRestful(-1, '记录不存在');
+            return json(mkRestful(-1, '记录不存在'));
         }
         $this->assign([
             'title' => '查看详情',
@@ -84,5 +85,31 @@ class BaseController extends Controller
             $return = mkRestful(1, '删除失败');
         }
         return $return;
+    }
+
+    /**
+     * @return \think\response\Json
+     */
+    public function upload()
+    {
+        $uploadDir = 'uploads';
+        $field = $this->request->param('field');
+        $file = $this->request->file($field);
+        $info = $file->move($uploadDir);
+        if ($info) {
+            $data = [
+                'ext'=>$info->getExtension(),
+                'filename'=>$info->getFilename(),
+                'path'=>$uploadDir . DIRECTORY_SEPARATOR .$info->getSaveName()
+            ];
+            return json(mkRestful(0, '上传成功', 'success', $data));
+        } else {
+            return json(mkRestful(
+                1,
+                '上传失败',
+                'error',
+                ['error'=>$file->getError()]
+            ));
+        }
     }
 }

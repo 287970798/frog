@@ -1,0 +1,127 @@
+{extend name="common/page"}
+{block name="style"}
+{__block__}
+<style>
+    #cat-tree{
+        position: absolute;
+        z-index: 999;
+        background-color: #fff;
+        border: 1px solid #EEE;
+        display: none;
+        font-size: 16px;
+    }
+</style>
+{/block}
+{block name="content"}
+<form class="layui-form" action="">
+    <div id="cat-tree"></div>
+    {if $multilingual === 1}
+    <div class="layui-form-item">
+        <label class="layui-form-label">语言</label>
+        <div class="layui-input-block">
+            <select name="language_id" lay-verify="required">
+                {volist name="languages" id="language"}
+                <option value="{$language.id}" {if $language.id == $detail.language_id}selected{/if}>{$language.name} ({$language.flag | strtoupper})</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    {/if}
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input value="{$detail.name}" type="text" name="name" required lay-verify="required" placeholder="请输入文章标题" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">栏目</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="category_id">
+            <input id="category-name" value="{$detail.category.name}" type="text" required lay-verify="required" placeholder="请选择栏目" autocomplete="off"
+                   class="layui-input" disabled>
+        </div>
+        <a id="select-cat" class="layui-btn layui-btn-radius layui-btn-primary">选择栏目</a>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">显示</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="是"  {if $detail.status == 1}checked{/if}>
+            <input type="radio" name="status" value="2" title="否" {if $detail.status == 2}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input value="{$detail.list_order}" type="number" name="list_order" required lay-verify="required" placeholder="请输入排序1-999整数，小在前" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">详情</label>
+        <div class="layui-input-block">
+            <textarea name="content" placeholder="请输入内容" class="layui-textarea">{$detail.content}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="editForm">修改</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name="script"}
+{__block__}
+<script>
+
+    var nodes = JSON.parse('{$tree|raw|json_encode}');
+
+    layui.use(['form', 'tree'], function () {
+        $k.submit('editForm', '/admin/product/edit/{$detail.id}', function () {
+            // reload category data table to refresh data
+            $k.reload(parent.tableInst, '/admin/product/all');
+            // 关闭父级弹出层
+            $k.adminClose();
+        });
+
+        layui.tree({
+            elem: '#cat-tree',
+            nodes: nodes
+            ,click: function(node){
+                if (node.children.length !== 0) return;
+                $('input[name="category_id"]').val(node.id);
+                $('#category-name').val(node.name);
+                $('#cat-tree').slideUp('fast');
+            }
+        });
+
+        $('body').click(function (e) {
+            var target = $(e.target);
+            var catTree = $('#cat-tree');
+            if (!target.is('#cat-tree *') && !target.is('#select-cat')) {
+                if (catTree.is(':visible')) {
+                    catTree.slideUp();
+                }
+            }
+        });
+
+        $('#select-cat').click(function () {
+            var catTree = $('#cat-tree');
+            var display = catTree.css('display');
+            if (display === 'block') {
+                catTree.slideUp();
+                return;
+            }
+            var p = $(this).offset();
+            var h = $(this).height();
+            catTree.css('top', p.top + h + 10)
+                .css('left', p.left)
+            catTree.slideDown();
+
+        })
+    })
+
+
+</script>
+{/block}
