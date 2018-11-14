@@ -72,6 +72,7 @@ Route::any('admin/file_center/edit/:id$', 'admin/FileCenter/edit');
 Route::any('admin/file_center/del', 'admin/FileCenter/del');
 Route::any('admin/file_center/add$', 'admin/FileCenter/add');
 Route::any('admin/file_center/upload/:field$', 'admin/FileCenter/upload');
+Route::any('admin/file_center/upload_editor/:field$', 'admin/FileCenter/upload_editor');
 
 
 

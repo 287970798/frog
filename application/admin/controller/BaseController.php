@@ -42,8 +42,8 @@ class BaseController extends Controller
             return;
         }
         // 如果未登录，打开后台页面跳转到登录页
-        if (!Session::has('admin') && $requestPrivilege !== 'admin/login/index'){
-            $this->redirect('/admin/login',302);
+        if (!Session::has('admin') && $requestPrivilege !== 'admin/login/index') {
+            $this->redirect('/admin/login', 302);
         }
 
         // 获取用户权限
@@ -80,7 +80,7 @@ class BaseController extends Controller
         $ids = $this->request->delete('ids');
         $result = $model->destroy($ids);
         if ($result > 0) {
-            $return = mkRestful(0, '成功删除'.$result.'条数据', 'success');
+            $return = mkRestful(0, '成功删除' . $result . '条数据', 'success');
         } else {
             $return = mkRestful(1, '删除失败');
         }
@@ -98,9 +98,9 @@ class BaseController extends Controller
         $info = $file->move($uploadDir);
         if ($info) {
             $data = [
-                'ext'=>$info->getExtension(),
-                'filename'=>$info->getFilename(),
-                'path'=>$uploadDir . DIRECTORY_SEPARATOR .$info->getSaveName()
+                'ext' => $info->getExtension(),
+                'filename' => $info->getFilename(),
+                'path' => $uploadDir . DIRECTORY_SEPARATOR . $info->getSaveName()
             ];
             return json(mkRestful(0, '上传成功', 'success', $data));
         } else {
@@ -108,7 +108,33 @@ class BaseController extends Controller
                 1,
                 '上传失败',
                 'error',
-                ['error'=>$file->getError()]
+                ['error' => $file->getError()]
+            ));
+        }
+    }
+
+    /**
+     * @return \think\response\Json
+     */
+    public function upload_editor()
+    {
+        $uploadDir = 'uploads';
+        $field = $this->request->param('field');
+        $file = $this->request->file($field);
+        $info = $file->move($uploadDir);
+        if ($info) {
+
+            $data = [
+                "url" => 'http://' . $this->request->host() . '/uploads/' . $info->getSaveName(),
+                "code" => 200
+            ];
+            return json($data);
+        } else {
+            return json(mkRestful(
+                1,
+                '上传失败',
+                'error',
+                ['error' => $file->getError()]
             ));
         }
     }
