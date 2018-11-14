@@ -40,7 +40,7 @@
                 {checkbox: true},
                 {field: 'id', title: 'ID', width: 80, sort: true},
                 {field: 'name', title: '标题'},
-                {field: 'path', title: '链接', templet: '<div>{{d.path}}</div>'},
+                {field: 'path', title: '链接', templet: '<div>{{"http://" + location.host + "/" + d.path}}</div>'},
                 {title: '操作', fixed: 'right', width: 200, align: 'center', toolbar: '#operateBar'}
 
             ]]

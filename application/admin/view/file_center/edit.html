@@ -24,7 +24,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addForm">增加</button>
+            <button class="layui-btn" lay-submit lay-filter="editForm">增加</button>
         </div>
     </div>
 </form>
@@ -49,18 +49,13 @@
 <script>
     layui.use(['form', 'upload'], function () {
 
-        layui.upload.render({
-            elem: '#upload-btn',
-            url: '',
+        $k.upload({
             done: function (res) {
-                console.log(res);
-            },
-            error: function (error) {
-                console.log(error)
+                $('input[name="path"]').val(res.success_response.data.path);
             }
         });
 
-        $k.submit('addForm', '/admin/file_center/add', function () {
+        $k.submit('editForm', '/admin/file_center/edit/{$detail.id}', function () {
             // reload category data table to refresh data
             $k.reload(parent.tableInst, '/admin/file_center/all');
             // 关闭父级弹出层

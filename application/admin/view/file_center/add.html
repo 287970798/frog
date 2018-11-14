@@ -49,7 +49,7 @@
 <script>
     layui.use(['form', 'upload'], function () {
 
-        upload({
+        $k.upload({
             done: function (res) {
                 console.log(123)
                 $('input[name="path"]').val(res.success_response.data.path);
@@ -64,31 +64,6 @@
         })
     });
 
-    function upload(options) {
-        options = options || {};
-        var loadIndex = null;
-        layui.upload.render({
-            elem: options.elem || '#upload-btn',
-            url: options.url || '/admin/file_center/upload/file',
-            auto: options.auto !== undefined ? options.auto : true,
-            accept: options.accept || 'file',
-            field: options.field || 'file',
-            before: function (obj) {
-                loadIndex = layui.layer.load('上传中');
-                console.log(obj);
-            },
-            done: function (res) {
-                layui.layer.close(loadIndex);
-                console.log(res);
-                (options.done || function(){})(res);
-            },
-            error: function (error) {
-                layui.layer.close(loadIndex);
-                layui.layer.alert('文件上传失败');
-                console.log(error);
-                (options.error || function(){})(error);
-            }
-        });
-    }
+
 </script>
 {/block}

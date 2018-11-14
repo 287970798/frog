@@ -1,0 +1,87 @@
+npm install --save-dev webpack
+npm install --save-dev webpack-cli
+
+npm install --save lodash // --save 用于生产  --save-dev 用于开发环境
+
+// import css
+npm install --save-dev style-loader css-loader
+- webpack.config.js
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader']
+            }
+        ]
+    }
+
+// import picture
+npm install --save-dev file-loader
+npm install --save-dev url-loader
+- webpack.config.js
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader']
+            }
+            {
+                test: /\.(png|svg|jpe?g|png)$/,
+                use: [ {loader: 'url-loader'}, options: {limit: 8192}]
+            }
+        ]
+    }
+
+// html-webpack-plugin
+npm install --save-dev html-webpack-plugin
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+module.exports = {
+  entry: {app: "./src/index.js", print: "./src/print.js"},
+  output: {filename: '[name].bundle.js', path: path.resolve(__dirname, 'dist')},
+  plugins: [new HtmlWebpackPlugin({title: 'output management'})]
+}
+
+// clean-webpack-plugin
+npm install --save-dev clean-webpack-plugin
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+plugins: [new CleanWebpackPlugin(['dist'])]
+
+// webpack's Watch Mode
+"scripts": {"watch": "webpack --watch"}
+npm run watch
+
+// webpack-dev-server
+npm install --save-dev webpack-dev-server
+devServer: {contentBase: './dist'}
+"scripts": {"start": "webpack-dev-server --open"}
+
+// webpck-dev-middleware
+
+
+// webpack-merge
+npm install --save-dev webpack-merge
+
+// babel
+
+了解babel
+说起编译es6，就必须提一下babel和相关的技术生态：
+babel-loader: 负责 es6 语法转化
+babel-preset-env: 包含 es6、7 等版本的语法转化规则
+babel-polyfill: es6 内置方法和函数转化垫片
+babel-plugin-transform-runtime: 避免 polyfill 污染全局变量
+需要注意的是, babel-loader和babel-polyfill。前者负责语法转化，比如：箭头函数；后者负责内置方法和函数，比如：new Set()
+
+npm install --save-dev @babel/core @babel/preset-env babel-loader babel-polyfill
+注意：	babel-loader@8 requires Babel 7.x (the package '@babel/core'). If you'd like to use Babel 6.x ('babel-core'), you should install 'babel-loader@7'
+	babel-loader@8 需要babel 7.x ( @babel/core )
+	babel-loader@7 需要babel 6.x ( babel-core )
+package.json 
+----
+"babel": {"presets":["@babel/env"]}
+
+// 引用jquery
+const webpack = require('webpack');
+plugins: [new webpack.ProvidePlugin({$: 'jquery'})]
+
+// html-webpack-plugin
+
