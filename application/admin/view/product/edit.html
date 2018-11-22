@@ -12,6 +12,13 @@
     }
 </style>
 {/block}
+
+<!--编辑器js-->
+{block name="js"}
+{__block__}
+{include file="common/editor-js"}
+{/block}
+
 {block name="content"}
 <form class="layui-form" action="">
     <div id="cat-tree"></div>
@@ -37,7 +44,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">栏目</label>
         <div class="layui-input-inline">
-            <input type="hidden" name="category_id">
+            <input value="{$detail.category_id}" type="hidden" name="category_id">
             <input id="category-name" value="{$detail.category.name}" type="text" required lay-verify="required" placeholder="请选择栏目" autocomplete="off"
                    class="layui-input" disabled>
         </div>
@@ -60,7 +67,7 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">详情</label>
         <div class="layui-input-block">
-            <textarea name="content" placeholder="请输入内容" class="layui-textarea">{$detail.content}</textarea>
+            <textarea name="content" id="content" placeholder="请输入内容" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
@@ -74,6 +81,8 @@
 {block name="script"}
 {__block__}
 <script>
+
+    $k.mkEditor(null, null, null, '{$detail.content|raw}');
 
     var nodes = JSON.parse('{$tree|raw|json_encode}');
 

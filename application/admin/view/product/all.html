@@ -26,7 +26,7 @@
 {__block__}
 <script>
     var tableInst = null;
-    layui.use(['table'], function() {
+    layui.use(['table', 'util'], function() {
         var table = layui.table;
         // render table
         var categoryData = {$products|raw};
@@ -40,10 +40,11 @@
                 {checkbox: true},
                 {field: 'id', title: 'ID', width: 80, sort: true},
                 {field: 'name', title: '标题'},
-                {title: '栏目', templet: '<div>{{d.category.name}}</div>'},
-                {title: '显示', templet: function (d) {
+                {title: '栏目', templet: '<div>{{d.category.name}}</div>', width: 200},
+                {title: '显示', width: 80, templet: function (d) {
                         return d.status === 1 ? '开启' : '关闭';
                     }},
+                {title: '发布时间', width: 150, templet: '<div>{{layui.util.timeAgo(d.create_time, true)}}</div>'},
                 {title: '操作', fixed: 'right', width: 200, align: 'center', toolbar: '#operateBar'}
 
             ]]

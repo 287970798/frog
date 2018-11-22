@@ -10,8 +10,52 @@
         display: none;
         font-size: 16px;
     }
+    .layui-field-box{
+        padding: 15px;
+        display: -webkit-flex;
+        display: flex;
+    }
+    #upload-btn{
+        display: -webkit-flex;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+    #upload-btn:hover{
+        border: 1px solid #999999;
+    }
+    #thumb-box{
+        display: -webkit-flex;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    #thumb-box .thumb-item{
+        width: 100px;
+        height: 96px;
+        border: 1px solid #eee;
+        padding: 2px;
+        margin: 0 2px 2px 0;
+
+        display: -webkit-flex;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #thumb-box .thumb-item img{
+        max-width: 100%;
+        max-height: 100%;
+    }
 </style>
 {/block}
+
+<!--编辑器js-->
+{block name="js"}
+{__block__}
+{include file="common/editor-js"}
+{/block}
+
+{block }
 {block name="content"}
 <form class="layui-form" action="">
     <div id="cat-tree"></div>
@@ -43,6 +87,32 @@
         </div>
         <a id="select-cat" class="layui-btn layui-btn-radius layui-btn-primary">选择栏目</a>
     </div>
+    <fieldset class="layui-elem-field">
+        <legend>缩略图</legend>
+        <div class="layui-field-box">
+            <div id="thumb-box">
+                <div class="thumb-item">
+                    <img src="http://frog.uniteedu.cn/uploads/20181115/efbb04b66c5c17db3a3db9bd644ff28c.JPG" alt="">
+                </div>
+                <div class="thumb-item">
+                    <img src="http://frog.uniteedu.cn/uploads/20181115/efbb04b66c5c17db3a3db9bd644ff28c.JPG" alt="">
+                </div>
+                <div class="thumb-item">
+                    <img src="http://frog.uniteedu.cn/uploads/20181115/efbb04b66c5c17db3a3db9bd644ff28c.JPG" alt="">
+                </div>
+                <div class="thumb-item" id="upload-btn">
+                    <svg t="1542252419335" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                         p-id="17721" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48">
+                        <defs>
+                            <style type="text/css"></style>
+                        </defs>
+                        <path d="M485.984865 485.984865H0v28.588973h485.984865v485.984865h28.588973v-485.984865h485.984865V485.984865h-485.984865V0H485.984865v485.984865z"
+                              p-id="17722" fill="#eeeeee"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </fieldset>
     <div class="layui-form-item">
         <label class="layui-form-label">显示</label>
         <div class="layui-input-block">
@@ -60,7 +130,7 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">详情</label>
         <div class="layui-input-block">
-            <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+            <textarea name="content" id="content" placeholder="请输入内容" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
@@ -74,16 +144,36 @@
 {block name="script"}
 {__block__}
 <script>
-
+    $k.mkEditor();
     var nodes = JSON.parse('{$tree|raw|json_encode}');
 
-    layui.use(['form', 'tree'], function () {
+    layui.use(['form', 'tree', 'upload'], function () {
         $k.submit('addForm', '/admin/product/add', function () {
             // reload category data table to refresh data
             $k.reload(parent.tableInst, '/admin/product/all');
             // 关闭父级弹出层
             $k.adminClose();
+        }, true);
+
+        $k.upload({
+            done: function (res) {
+                var newItem = mkThumbItem(res.success_response.data.path);
+                $('#upload-btn').before(newItem);
+            }
         });
+        function mkThumbItem(src){
+            var item = document.createElement('div');
+            $(item).addClass('thumb-item');
+            var itemImg = document.createElement('img');
+            $(itemImg).attr('src', 'http://' + location.host + '/' + src);
+            var itemInput = document.createElement('input');
+            $(itemInput).attr('name', 'thumb[]').attr('type', 'hidden').val(src);
+
+            $(item).append(itemImg).append(itemInput);
+
+
+            return item;
+        }
 
         layui.tree({
             elem: '#cat-tree',
